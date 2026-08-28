@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#126c59" />
+  <meta name="description" content="فاحص الطعام الذكي لمسك" />
+  <title>Misk FoodTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="identity">
+        <div class="avatar" aria-hidden="true">م</div>
+        <div>
+          <h1>مرحبا مسك <span>🌷</span></h1>
+          <p>فاحص الطعام الذكي - ImuPro</p>
+        </div>
+      </div>
+      <span class="trial">تجربة</span>
+    </header>
+
+    <section class="usage" aria-label="الرصيد اليومي">
+      <div><strong id="imageCount">10</strong><span>📸 فحص بالصورة</span></div>
+      <div><strong id="textCount">10</strong><span>💬 بحث نصي</span></div>
+    </section>
+
+    <section class="checker card">
+      <h2>هل هذا الطعام آمن لك؟</h2>
+      <p class="lead">صوّري ملصق المنتج، أو ارفعي صورة الوجبة، أو اكتبي اسمها بالعربي.</p>
+
+      <div class="photo-actions">
+        <label class="photo-button camera" for="cameraInput"><span class="icon">◎</span><span>التقطي صورة</span></label>
+        <label class="photo-button gallery" for="galleryInput"><span class="icon">▧</span><span>ارفعي من المعرض</span></label>
+        <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden />
+        <input id="galleryInput" type="file" accept="image/*" hidden />
+      </div>
+
+      <div id="previewWrap" class="preview" hidden>
+        <img id="previewImage" alt="معاينة الصورة المرفوعة" />
+        <div><strong id="previewName"></strong><span>الصورة جاهزة للفحص</span></div>
+        <button id="removeImage" type="button" aria-label="إزالة الصورة">×</button>
+      </div>
+
+      <form id="foodForm" class="search-row">
+        <input id="foodInput" autocomplete="off" placeholder="مثال: منسف، لبنة، معكرونة..." aria-label="اسم الطعام أو مكوناته" />
+        <button id="checkButton" type="submit">افحصي</button>
+      </form>
+      <p class="hint">يمكنك كتابة اسم الطعام أو نسخ قائمة المكونات من الملصق.</p>
+      <div id="result" aria-live="polite"></div>
+    </section>
+
+    <section class="restrictions">
+      <button id="listToggle" class="list-toggle" aria-expanded="false">
+        <span>عرض قائمة الأطعمة الممنوعة الكاملة (13 مجموعة)</span><span id="arrow">▼</span>
+      </button>
+      <div id="foodList" class="food-list" hidden></div>
+    </section>
+
+    <footer>
+      <p>الأداة مبنية على قائمة مسك الكاملة (13 مجموعة ممنوعة)</p>
+      <p>تشمل: جلوتين، ألبان، صويا، بقوليات، مكسرات، سمسم، بيض، فواكه، قشريات، أرانب</p>
+      <p>⚠️ هذه أداة مساعدة، ليست بديلاً عن استشارة الطبيب</p>
+      <strong>Misk Powered by FoodTracker</strong>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
