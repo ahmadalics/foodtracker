@@ -46,11 +46,14 @@
         <button id="removeImage" type="button" aria-label="إزالة الصورة">×</button>
       </div>
 
-      <form id="foodForm" class="search-row">
-        <input id="foodInput" autocomplete="off" placeholder="مثال: منسف، لبنة، معكرونة..." aria-label="اسم الطعام أو مكوناته" />
-        <button id="checkButton" type="submit">افحصي</button>
+      <form id="foodForm" class="food-form">
+        <label for="productName">اسم المنتج <span>مطلوب</span></label>
+        <input id="productName" required autocomplete="off" placeholder="مثال: حليب البقر قليل الدسم 2%" aria-label="اسم المنتج" />
+        <label for="ingredientsInput">المكونات</label>
+        <textarea id="ingredientsInput" rows="3" placeholder="اكتبي أو الصقي قائمة المكونات الموجودة على العبوة..." aria-label="قائمة المكونات"></textarea>
+        <button id="checkButton" type="submit">افحصي المنتج</button>
       </form>
-      <p class="hint">يمكنك كتابة اسم الطعام أو نسخ قائمة المكونات من الملصق.</p>
+      <p class="hint">لنتيجة أدق: اكتبي اسم المنتج ثم انسخي المكونات من الملصق، أو ارفعي صورته.</p>
       <div id="result" aria-live="polite"></div>
     </section>
 
