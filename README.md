@@ -1,6 +1,6 @@
-# Misk FoodTracker
+# FoodTracker
 
-Arabic RTL food-safety checker inspired by the supplied reference, rebranded for Misk.
+Arabic RTL food-safety checker inspired by the supplied reference.
 
 Open `index.html` directly, or run a local static server:
 
