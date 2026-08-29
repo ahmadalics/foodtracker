@@ -46,8 +46,10 @@ async function readImage(){
   let ocrConfidence=0;
   try{
     $('result').innerHTML='<p class="scan-progress">جاري قراءة النص من الصورة...</p>';
-    const worker=await Tesseract.createWorker('ara+eng');
-    const output=await worker.recognize(image);
+    const worker=await Tesseract.createWorker('eng+ara',1,{workerPath:'vendor/tesseract/worker.min.js',corePath:'vendor/tesseract/core',langPath:'vendor/tesseract/lang',gzip:true});
+    await worker.setParameters({tessedit_pageseg_mode:'11',preserve_interword_spaces:'1'});
+    const prepared=prepareProductImage(image);
+    const output=await worker.recognize(prepared);
     ocrConfidence=Number(output.data.confidence||0);
     ocrText=cleanOcrText(output.data.text||'',ocrConfidence);
     await worker.terminate();
@@ -61,6 +63,7 @@ async function readImage(){
   }catch(error){console.warn('Image classification unavailable',error)}
   return {ocrText,ocrConfidence,labels:[...new Set(findings)]};
 }
+function prepareProductImage(image){const source=document.createElement('canvas');source.width=image.naturalWidth;source.height=image.naturalHeight;const context=source.getContext('2d',{willReadFrequently:true});context.drawImage(image,0,0);const pixels=context.getImageData(0,0,source.width,source.height).data;let minX=source.width,minY=source.height,maxX=0,maxY=0,count=0;for(let y=0;y<source.height;y+=3){for(let x=0;x<source.width;x+=3){const index=(y*source.width+x)*4;const r=pixels[index],g=pixels[index+1],b=pixels[index+2];const high=Math.max(r,g,b),low=Math.min(r,g,b);if(high>70&&high-low>55){minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);count++}}}if(count<80){minX=0;minY=0;maxX=source.width;maxY=source.height}const padX=Math.round((maxX-minX)*.08),padY=Math.round((maxY-minY)*.12);minX=Math.max(0,minX-padX);minY=Math.max(0,minY-padY);maxX=Math.min(source.width,maxX+padX);maxY=Math.min(source.height,maxY+padY);const width=Math.max(1,maxX-minX),height=Math.max(1,maxY-minY);const scale=Math.min(3,Math.max(1.6,1400/width));const output=document.createElement('canvas');output.width=Math.round(width*scale);output.height=Math.round(height*scale);const out=output.getContext('2d');out.imageSmoothingEnabled=true;out.imageSmoothingQuality='high';out.drawImage(source,minX,minY,width,height,0,0,output.width,output.height);return output}
 function cleanOcrText(text,confidence){if(confidence<38)return'';const words=text.replace(/[^\u0600-\u06FFa-zA-Z0-9%.,()\-\s]/g,' ').split(/\s+/).filter(word=>word.length>=2||/^[0-9]+%?$/.test(word));const meaningful=words.filter(word=>/[\u0600-\u06FFa-zA-Z]{2}/.test(word)||/^[0-9]+%?$/.test(word));return meaningful.join(' ').slice(0,360)}
 function friendlyLabels(labels){const map={fig:'تين',milk:'حليب',yogurt:'زبادي',cheese:'جبنة',bread:'خبز',banana:'موز',orange:'برتقال',lemon:'ليمون',pineapple:'أناناس',strawberry:'فراولة',apple:'تفاح',broccoli:'بروكلي',cucumber:'خيار',mushroom:'فطر',pizza:'بيتزا',icecream:'آيس كريم'};return labels.map(label=>{const first=label.split(',')[0].trim();const key=Object.keys(map).find(item=>first.toLowerCase().includes(item));return key?map[key]:first}).filter(Boolean)}
 function hasReliableEvidence(name,ingredients,reading){return Boolean(ingredients.trim()||(reading&&reading.ocrText&&reading.ocrConfidence>=38))}
