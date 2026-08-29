@@ -47,13 +47,12 @@
       </div>
 
       <form id="foodForm" class="food-form">
-        <label for="productName">اسم المنتج <span>مطلوب</span></label>
-        <input id="productName" required autocomplete="off" placeholder="مثال: حليب البقر قليل الدسم 2%" aria-label="اسم المنتج" />
+        <input id="productName" type="hidden" />
         <label for="ingredientsInput">المكونات</label>
-        <textarea id="ingredientsInput" rows="3" placeholder="اكتبي أو الصقي قائمة المكونات الموجودة على العبوة..." aria-label="قائمة المكونات"></textarea>
+        <textarea id="ingredientsInput" rows="3" placeholder="اكتبي اسم الطعام أو الصقي قائمة المكونات الموجودة على العبوة..." aria-label="اسم الطعام أو قائمة المكونات"></textarea>
         <button id="checkButton" type="submit">افحصي المنتج</button>
       </form>
-      <p class="hint">لنتيجة أدق: اكتبي اسم المنتج ثم انسخي المكونات من الملصق، أو ارفعي صورته.</p>
+      <p class="hint">اكتبي اسم الطعام أو المكونات، أو ارفعي صورة ليتم فحصها تلقائياً.</p>
       <div id="result" aria-live="polite"></div>
     </section>
 
@@ -74,6 +73,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script src="app.js?v=731e83d-2"></script>
+  <script src="app.js?v=remove-name-field"></script>
 </body>
 </html>
