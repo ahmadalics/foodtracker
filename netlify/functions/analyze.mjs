@@ -33,7 +33,7 @@ export async function handler(event) {
     if (!imageBase64 || !/^image\/(jpeg|png|webp|gif)$/.test(mediaType || '')) return response(400, { error: 'Valid image required' }, origin);
     if (imageBase64.length > 8_000_000) return response(413, { error: 'Image is too large' }, origin);
 
-    const prompt = `أنت اختصاصي دقيق لفحص الطعام. اقرأ الصورة بصرياً: اسم المنتج، نوعه، النص الظاهر، وقائمة المكونات إن وجدت. قارن كل شيء بالقائمة الممنوعة التالية:\n${GROUPS}\nمعلومات كتبها المستخدم إن وجدت: ${userText || 'لا يوجد'}\nلا تخمّن أن المنتج آمن إذا كانت الصورة غير واضحة. أرجع JSON فقط دون markdown بهذا الشكل:
+    const prompt = `أنت اختصاصي دقيق لفحص الطعام. اقرأ الصورة بصرياً: اسم المنتج، نوعه، النص الظاهر، وقائمة المكونات إن وجدت. قارن كل شيء بالقائمة الممنوعة التالية:\n${GROUPS}\nمعلومات كتبها المستخدم إن وجدت: ${userText || 'لا يوجد'}\nقواعد إلزامية: لا تستنتج القمح أو الحليب أو البيض أو أي مكون ممنوع من ألوان العبوة أو شكلها. لا تضع status=prohibited إلا عندما ترى اسم المكون أو تحذير الحساسية بوضوح، أو تتعرف بثقة عالية جداً على منتج معروف يحتوي عليه حتماً. عبوات المشروبات الغازية والعصائر ليست بسكويتاً ولا منتجات ألبان؛ تعرّف على العلامة والنوع الظاهرين أولاً. إذا لم تستطع قراءة دليل مباشر فاختر uncertain، ولا تختر مكونات محتملة أو متخيلة. اجعل evidence يذكر النص المرئي الذي يثبت كل detected. أرجع JSON فقط دون markdown بهذا الشكل:
 {"status":"prohibited|safe|uncertain","productName":"اسم عربي واضح","subtitle":"وصف قصير","detected":[{"group":"اسم المجموعة","ingredient":"المكون المكتشف"}],"hiddenWarning":"شرح عربي محدد للمصادر الخفية","notes":"ملاحظات عربية عملية","alternatives":["بديل 1","بديل 2","بديل 3"],"evidence":"ملخص قصير لما قرأته فعلياً"}`;
 
     const apiResponse = await fetch('https://api.anthropic.com/v1/messages', {
